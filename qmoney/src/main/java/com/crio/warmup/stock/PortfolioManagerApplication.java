@@ -1,7 +1,4 @@
-
 package com.crio.warmup.stock;
-
-
 import com.crio.warmup.stock.dto.AnnualizedReturn;
 import com.crio.warmup.stock.dto.PortfolioTrade;
 import com.crio.warmup.stock.log.UncaughtExceptionHandler;
@@ -45,12 +42,13 @@ public class PortfolioManagerApplication {
   //  There can be few unused imports, you will need to fix them to make the build pass.
 
   public static List<String> mainReadFile(String[] args) throws IOException, URISyntaxException {
-    ObjectMapper obj_mapper = getObjectMapper();
-    List<PortfolioTrade> trades = Arrays.asList(obj_mapper.readValue(resolveFileFromResources(args[0]),PortfolioTrade[].class));
+    ObjectMapper objMapper = getObjectMapper();
+    List<PortfolioTrade> trades = Arrays
+    .asList(objMapper.readValue(resolveFileFromResources(args[0]),PortfolioTrade[].class));
     List<String> symbols = new ArrayList<String>();
     for (PortfolioTrade t:trades){
       symbols.add(t.getSymbol());
-    } 
+    }
     return symbols;
   }
 
@@ -112,7 +110,8 @@ public class PortfolioManagerApplication {
     String valueOfArgument0 = "trades.json";
     String resultOfResolveFilePathArgs0 = "/home/crio-user/workspace/bkp10-iitbbs-ac-ME_QMONEY/qmoney/bin/main/trades.json";
     String toStringOfObjectMapper = "com.fasterxml.jackson.databind.ObjectMapper@5aac4250";
-    String functionNameFromTestFileInStackTrace = "PortfolioManagerApplicationTest.mainReadFile";
+    String functionNameFromTestFileInStackTrace = 
+    "PortfolioManagerApplicationTest.mainReadFile";
     String lineNumberFromTestFileInStackTrace = "22:1";
 
 
