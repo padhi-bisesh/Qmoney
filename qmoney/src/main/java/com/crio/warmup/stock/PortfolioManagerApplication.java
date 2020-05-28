@@ -1,5 +1,10 @@
 package com.crio.warmup.stock;
 
+import com.crio.warmup.stock.dto.PortfolioTrade;
+import com.crio.warmup.stock.log.UncaughtExceptionHandler;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -9,11 +14,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
-
-import com.crio.warmup.stock.dto.PortfolioTrade;
-import com.crio.warmup.stock.log.UncaughtExceptionHandler;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import org.apache.logging.log4j.ThreadContext;
 
@@ -53,7 +53,9 @@ public class PortfolioManagerApplication {
   }
 
   private static File resolveFileFromResources(String filename) throws URISyntaxException {
-    return Paths.get(Thread.currentThread().getContextClassLoader().getResource(filename).toURI()).toFile();
+    return 
+    Paths.get(Thread.currentThread().getContextClassLoader().getResource(filename).toURI())
+    .toFile();
   }
 
   private static ObjectMapper getObjectMapper() {
@@ -99,13 +101,15 @@ public class PortfolioManagerApplication {
   public static List<String> debugOutputs() {
 
     String valueOfArgument0 = "trades.json";
-    String resultOfResolveFilePathArgs0 = "/home/crio-user/workspace/bkp10-iitbbs-ac-ME_QMONEY/qmoney/bin/main/trades.json";
+    String resultOfResolveFilePathArgs0 = 
+    "/home/crio-user/workspace/bkp10-iitbbs-ac-ME_QMONEY/qmoney/bin/main/trades.json";
     String toStringOfObjectMapper = "com.fasterxml.jackson.databind.ObjectMapper@5aac4250";
     String functionNameFromTestFileInStackTrace = "PortfolioManagerApplicationTest.mainReadFile";
     String lineNumberFromTestFileInStackTrace = "22:1";
 
-    return Arrays.asList(new String[] { valueOfArgument0, resultOfResolveFilePathArgs0, toStringOfObjectMapper,
-        functionNameFromTestFileInStackTrace, lineNumberFromTestFileInStackTrace });
+    return Arrays.asList(new String[] { valueOfArgument0, resultOfResolveFilePathArgs0, 
+      toStringOfObjectMapper, functionNameFromTestFileInStackTrace, 
+      lineNumberFromTestFileInStackTrace });
   }
 
   public static void main(String[] args) throws Exception {
