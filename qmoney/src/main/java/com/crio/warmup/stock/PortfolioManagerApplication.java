@@ -102,7 +102,7 @@ public class PortfolioManagerApplication {
 
     String valueOfArgument0 = "trades.json";
     String resultOfResolveFilePathArgs0 = 
-    "/home/crio-user/workspace/bkp10-iitbbs-ac-ME_QMONEY/qmoney/bin/main/trades.json";
+        "/home/crio-user/workspace/bkp10-iitbbs-ac-ME_QMONEY/qmoney/bin/main/trades.json";
     String toStringOfObjectMapper = "com.fasterxml.jackson.databind.ObjectMapper@5aac4250";
     String functionNameFromTestFileInStackTrace = "PortfolioManagerApplicationTest.mainReadFile";
     String lineNumberFromTestFileInStackTrace = "22:1";
