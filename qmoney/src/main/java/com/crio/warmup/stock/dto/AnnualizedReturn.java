@@ -28,7 +28,7 @@ public class AnnualizedReturn {
 
   public static final Comparator<AnnualizedReturn> annualGrowth = 
       new Comparator<AnnualizedReturn>() {
-        public int compare(AnnualizedReturn a1,AnnualizedReturn a2){
+        public int compare(AnnualizedReturn a1,AnnualizedReturn a2) {
           return (a1.annualizedReturn).compareTo(a2.annualizedReturn);
         }
       };

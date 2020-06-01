@@ -188,11 +188,12 @@ public class PortfolioManagerApplication {
     if (years <= 0) {
       years = 1;
     }
-    int total_num_years = years;
-    double annualisedReturn = Math.pow(1 + totalReturns,1/total_num_years)-1;
+    int totalnumyears = years;
+    double annualisedReturn = Math.pow(1 + totalReturns,1 / totalnumyears) - 1;
     AnnualizedReturn ar = new AnnualizedReturn(trade.getSymbol(),annualisedReturn,totalReturns);
     return ar;
   }
+  
   public static void main(String[] args) throws Exception {
     Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler());
     ThreadContext.put("runId", UUID.randomUUID().toString());
