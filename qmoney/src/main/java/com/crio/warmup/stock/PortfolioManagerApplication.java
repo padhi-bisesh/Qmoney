@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -114,12 +115,12 @@ public class PortfolioManagerApplication {
       TiingoCandle[] compStocks = rt.getForObject(uri, TiingoCandle[].class);
       int lowerIndex = 0;
       int upperIndex = compStocks.length - 1;
-      while (compStocks[upperIndex].getOpen() == null) {
+      while (compStocks[upperIndex].getClose() == null) {
         upperIndex--;
       }
       if (compStocks != null) {
-        stocks.add(calculateAnnualizedReturns(compStocks[compStocks.length - 1].getDate(),
-            t,compStocks[lowerIndex].getOpen(),compStocks[upperIndex].getOpen()));
+        stocks.add(calculateAnnualizedReturns(compStocks[upperIndex].getDate(),
+            t,compStocks[lowerIndex].getOpen(),compStocks[upperIndex].getClose()));
       }
     }
     return stocks;
@@ -164,6 +165,7 @@ public class PortfolioManagerApplication {
         .asList(objMapper.readValue(resolveFileFromResources(args[0]), PortfolioTrade[].class));
     List<AnnualizedReturn> stocks = dtoReturn2(args,trades);
     Collections.sort(stocks,AnnualizedReturn.annualGrowth);
+    Collections.reverse(stocks);
     return stocks; 
   }
 
@@ -181,12 +183,8 @@ public class PortfolioManagerApplication {
   public static AnnualizedReturn calculateAnnualizedReturns(LocalDate endDate,
       PortfolioTrade trade, Double buyPrice, Double sellPrice) {
     double totalReturns = (sellPrice - buyPrice) / buyPrice;
-    int years = (endDate.getYear() - trade.getPurchaseDate().getYear());
-    if (years <= 0) {
-      years = 1;
-    }
-    int totalnumyears = years;
-    double annualisedReturn = Math.pow(1 + totalReturns,1 / totalnumyears) - 1;
+    Double totyears = (double) ChronoUnit.DAYS.between(trade.getPurchaseDate(),endDate) / 365.00;
+    double annualisedReturn = Math.pow(1 + totalReturns,1 / totyears) - 1;
     AnnualizedReturn ar = new AnnualizedReturn(trade.getSymbol(),annualisedReturn,totalReturns);
     return ar;
   }
