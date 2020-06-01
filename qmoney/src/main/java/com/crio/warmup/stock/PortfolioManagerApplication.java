@@ -162,12 +162,12 @@ public class PortfolioManagerApplication {
 
   public static List<AnnualizedReturn> mainCalculateSingleReturn(String[] args)
       throws IOException, URISyntaxException {
-      ObjectMapper objMapper = getObjectMapper();
-      List<PortfolioTrade> trades = Arrays
-          .asList(objMapper.readValue(resolveFileFromResources(args[0]), PortfolioTrade[].class));
-      List<AnnualizedReturn> stocks = dtoReturn2(args,trades);
-      Collections.sort(stocks,AnnualizedReturn.annualGrowth);
-      return stocks; 
+    ObjectMapper objMapper = getObjectMapper();
+    List<PortfolioTrade> trades = Arrays
+        .asList(objMapper.readValue(resolveFileFromResources(args[0]), PortfolioTrade[].class));
+    List<AnnualizedReturn> stocks = dtoReturn2(args,trades);
+    Collections.sort(stocks,AnnualizedReturn.annualGrowth);
+    return stocks; 
   }
 
   // TODO: CRIO_TASK_MODULE_CALCULATIONS
@@ -183,15 +183,15 @@ public class PortfolioManagerApplication {
 
   public static AnnualizedReturn calculateAnnualizedReturns(LocalDate endDate,
       PortfolioTrade trade, Double buyPrice, Double sellPrice) {
-      double totalReturns = (sellPrice - buyPrice)/buyPrice;
-      int years = (endDate.getYear() - trade.getPurchaseDate().getYear());
-      if ( years <= 0 ) {
-        years = 1;
-      }
-      int total_num_years = years;
-      double annualisedReturn = Math.pow(1 + totalReturns,1/total_num_years)-1;
-      AnnualizedReturn ar = new AnnualizedReturn(trade.getSymbol(),annualisedReturn,totalReturns);
-      return ar;
+    double totalReturns = (sellPrice - buyPrice) / buyPrice;
+    int years = (endDate.getYear() - trade.getPurchaseDate().getYear());
+    if (years <= 0) {
+      years = 1;
+    }
+    int total_num_years = years;
+    double annualisedReturn = Math.pow(1 + totalReturns,1/total_num_years)-1;
+    AnnualizedReturn ar = new AnnualizedReturn(trade.getSymbol(),annualisedReturn,totalReturns);
+    return ar;
   }
   public static void main(String[] args) throws Exception {
     Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler());
