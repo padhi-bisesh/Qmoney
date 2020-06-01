@@ -113,14 +113,13 @@ public class PortfolioManagerApplication {
           + "&token=617816cec9dd9cf627651339b4c7a7775e7eb58b";
       RestTemplate rt = new RestTemplate();
       TiingoCandle[] compStocks = rt.getForObject(uri, TiingoCandle[].class);
-      int lowerIndex = 0;
       int upperIndex = compStocks.length - 1;
       while (compStocks[upperIndex].getClose() == null) {
         upperIndex--;
       }
       if (compStocks != null) {
         stocks.add(calculateAnnualizedReturns(compStocks[upperIndex].getDate(),
-            t,compStocks[lowerIndex].getOpen(),compStocks[upperIndex].getClose()));
+            t,compStocks[0].getOpen(),compStocks[upperIndex].getClose()));
       }
     }
     return stocks;
@@ -185,8 +184,7 @@ public class PortfolioManagerApplication {
     double totalReturns = (sellPrice - buyPrice) / buyPrice;
     Double totyears = (double) ChronoUnit.DAYS.between(trade.getPurchaseDate(),endDate) / 365.00;
     double annualisedReturn = Math.pow(1 + totalReturns,1 / totyears) - 1;
-    AnnualizedReturn ar = new AnnualizedReturn(trade.getSymbol(),annualisedReturn,totalReturns);
-    return ar;
+    return new AnnualizedReturn(trade.getSymbol(),annualisedReturn,totalReturns);
   }
 
   public static void main(String[] args) throws Exception {
