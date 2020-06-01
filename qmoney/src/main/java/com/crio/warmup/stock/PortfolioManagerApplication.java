@@ -117,10 +117,8 @@ public class PortfolioManagerApplication {
       while (compStocks[upperIndex].getClose() == null) {
         upperIndex--;
       }
-      if (compStocks != null) {
-        stocks.add(calculateAnnualizedReturns(compStocks[upperIndex].getDate(),
-            t,compStocks[0].getOpen(),compStocks[upperIndex].getClose()));
-      }
+      stocks.add(calculateAnnualizedReturns(compStocks[upperIndex].getDate(),
+          t,compStocks[0].getOpen(),compStocks[upperIndex].getClose()));
     }
     return stocks;
   }
