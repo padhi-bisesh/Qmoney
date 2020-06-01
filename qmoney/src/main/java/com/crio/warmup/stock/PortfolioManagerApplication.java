@@ -113,9 +113,6 @@ public class PortfolioManagerApplication {
       RestTemplate rt = new RestTemplate();
       TiingoCandle[] compStocks = rt.getForObject(uri, TiingoCandle[].class);
       int lowerIndex = 0;
-      while (compStocks[lowerIndex].getOpen() == null) {
-        lowerIndex++;
-      }
       int upperIndex = compStocks.length - 1;
       while (compStocks[upperIndex].getOpen() == null) {
         upperIndex--;
@@ -193,7 +190,7 @@ public class PortfolioManagerApplication {
     AnnualizedReturn ar = new AnnualizedReturn(trade.getSymbol(),annualisedReturn,totalReturns);
     return ar;
   }
-  
+
   public static void main(String[] args) throws Exception {
     Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler());
     ThreadContext.put("runId", UUID.randomUUID().toString());
