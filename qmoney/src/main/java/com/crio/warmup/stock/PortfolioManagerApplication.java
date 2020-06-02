@@ -113,12 +113,14 @@ public class PortfolioManagerApplication {
           + "&token=617816cec9dd9cf627651339b4c7a7775e7eb58b";
       RestTemplate rt = new RestTemplate();
       TiingoCandle[] compStocks = rt.getForObject(uri, TiingoCandle[].class);
-      int upperIndex = compStocks.length - 1;
-      while (compStocks[upperIndex].getClose() == null) {
-        upperIndex--;
+      if (compStocks != null) {  
+        int upperIndex = compStocks.length - 1;
+        while (compStocks[upperIndex] == null) {
+          upperIndex--;
+        }
+        stocks.add(calculateAnnualizedReturns(compStocks[upperIndex].getDate(),
+            t,compStocks[0].getOpen(),compStocks[upperIndex].getClose()));
       }
-      stocks.add(calculateAnnualizedReturns(compStocks[upperIndex].getDate(),
-          t,compStocks[0].getOpen(),compStocks[upperIndex].getClose()));
     }
     return stocks;
   }
