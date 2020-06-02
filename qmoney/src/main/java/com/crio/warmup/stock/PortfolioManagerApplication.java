@@ -108,13 +108,9 @@ public class PortfolioManagerApplication {
   public static List<AnnualizedReturn> dtoReturn2(String[] args,List<PortfolioTrade> trades) {
     List<AnnualizedReturn> stocks = new ArrayList<AnnualizedReturn>();
     for (PortfolioTrade t:trades) {
-      String uri = null;
-      do{
-        uri = "https://api.tiingo.com/tiingo/daily/" + t.getSymbol() + "/prices?startDate="
-            + t.getPurchaseDate().toString() + "&endDate=" + args[1] 
-            + "&token=617816cec9dd9cf627651339b4c7a7775e7eb58b";
-        if()
-      }while();
+      String uri = "https://api.tiingo.com/tiingo/daily/" + t.getSymbol() + "/prices?startDate="
+          + t.getPurchaseDate().toString() + "&endDate=" + args[1] 
+          + "&token=617816cec9dd9cf627651339b4c7a7775e7eb58b";
       RestTemplate rt = new RestTemplate();
       TiingoCandle[] compStocks = rt.getForObject(uri, TiingoCandle[].class);
       int upperIndex = compStocks.length - 1;
