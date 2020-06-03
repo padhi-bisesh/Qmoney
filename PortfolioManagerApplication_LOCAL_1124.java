@@ -2,36 +2,26 @@
 package com.crio.warmup.stock;
 
 import com.crio.warmup.stock.dto.AnnualizedReturn;
-import com.crio.warmup.stock.dto.Candle;
 import com.crio.warmup.stock.dto.PortfolioTrade;
 import com.crio.warmup.stock.dto.TiingoCandle;
-
-import com.crio.warmup.stock.dto.AnnualizedReturn;
-import com.crio.warmup.stock.dto.PortfolioTrade;
 import com.crio.warmup.stock.dto.TotalReturnsDto;
 import com.crio.warmup.stock.log.UncaughtExceptionHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.Temporal;
-import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.web.client.RestTemplate;
 
@@ -123,17 +113,13 @@ public class PortfolioManagerApplication {
           + "&token=617816cec9dd9cf627651339b4c7a7775e7eb58b";
       RestTemplate rt = new RestTemplate();
       TiingoCandle[] compStocks = rt.getForObject(uri, TiingoCandle[].class);
-      int lowerIndex = 0;
-      while(compStocks[lowerIndex].getOpen()==null) {
-        lowerIndex++;
-      }
-      int upperIndex = compStocks.length - 1;
-      while(compStocks[upperIndex].getOpen()==null) {
-        upperIndex--;
-      }
-      if (compStocks != null) {
-        stocks.add(calculateAnnualizedReturns(compStocks[compStocks.length - 1].getDate(),
-            t,compStocks[lowerIndex].getOpen(),compStocks[upperIndex].getOpen()));
+      if (compStocks != null) {  
+        int upperIndex = compStocks.length - 1;
+        while (compStocks[upperIndex] == null) {
+          upperIndex--;
+        }
+        stocks.add(calculateAnnualizedReturns(compStocks[upperIndex].getDate(),
+            t,compStocks[0].getOpen(),compStocks[upperIndex].getClose()));
       }
     }
     return stocks;
@@ -173,12 +159,13 @@ public class PortfolioManagerApplication {
 
   public static List<AnnualizedReturn> mainCalculateSingleReturn(String[] args)
       throws IOException, URISyntaxException {
-      ObjectMapper objMapper = getObjectMapper();
-      List<PortfolioTrade> trades = Arrays
-          .asList(objMapper.readValue(resolveFileFromResources(args[0]), PortfolioTrade[].class));
-      List<AnnualizedReturn> stocks = dtoReturn2(args,trades);
-      Collections.sort(stocks,AnnualizedReturn.annualGrowth);
-      return stocks; 
+    ObjectMapper objMapper = getObjectMapper();
+    List<PortfolioTrade> trades = Arrays
+        .asList(objMapper.readValue(resolveFileFromResources(args[0]), PortfolioTrade[].class));
+    List<AnnualizedReturn> stocks = dtoReturn2(args,trades);
+    Collections.sort(stocks,AnnualizedReturn.annualGrowth);
+    Collections.reverse(stocks);
+    return stocks; 
   }
 
   // TODO: CRIO_TASK_MODULE_CALCULATIONS
@@ -194,16 +181,12 @@ public class PortfolioManagerApplication {
 
   public static AnnualizedReturn calculateAnnualizedReturns(LocalDate endDate,
       PortfolioTrade trade, Double buyPrice, Double sellPrice) {
-      double totalReturns = (sellPrice - buyPrice)/buyPrice;
-      int years = (endDate.getYear() - trade.getPurchaseDate().getYear());
-      if ( years <= 0 ) {
-        years = 1;
-      }
-      int total_num_years = years;
-      double annualisedReturn = Math.pow(1 + totalReturns,1/total_num_years)-1;
-      AnnualizedReturn ar = new AnnualizedReturn(trade.getSymbol(),annualisedReturn,totalReturns);
-      return ar;
+    double totalReturns = (sellPrice - buyPrice) / buyPrice;
+    Double totyears = (double) ChronoUnit.DAYS.between(trade.getPurchaseDate(),endDate) / 365.00;
+    double annualisedReturn = Math.pow(1 + totalReturns,1 / totyears) - 1;
+    return new AnnualizedReturn(trade.getSymbol(),annualisedReturn,totalReturns);
   }
+
   public static void main(String[] args) throws Exception {
     Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler());
     ThreadContext.put("runId", UUID.randomUUID().toString());
