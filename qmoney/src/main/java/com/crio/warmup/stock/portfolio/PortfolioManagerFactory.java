@@ -12,7 +12,7 @@ public class PortfolioManagerFactory {
   // PortfolioManager using RestTemplate provided.
   public static PortfolioManager getPortfolioManager(String provider,RestTemplate restTemplate) {
     StockQuoteServiceFactory factory = StockQuoteServiceFactory.INSTANCE;
-    if (provider != null){  
+    if (provider != null) {  
       StockQuotesService sqs = factory.getService(provider, restTemplate); 
       PortfolioManager manager = new PortfolioManagerImpl(sqs);
       return manager;
