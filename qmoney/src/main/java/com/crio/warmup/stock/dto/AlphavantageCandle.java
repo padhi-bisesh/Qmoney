@@ -69,7 +69,6 @@ public class AlphavantageCandle implements Candle {
   }
 
   public void setDate(LocalDate date) {
-    //String temp = date.toString();
     this.date = java.sql.Date.valueOf(date);
   }
 
